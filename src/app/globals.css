@@ -1,25 +1,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-.container {
-  text-align: center;
-}
-
-.board {
-  display: grid;
-  grid-template-columns: repeat(3, 100px);
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.tile {
-  width: 100px;
-  height: 100px;
-  background-color: lightblue;
-  font-size: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
