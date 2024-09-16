@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useSocket } from "@/hooks/useSocket"; // Import the updated useSocket hook
+import { useSocket } from "@/hooks/useSocket";
 import Tile from "@/components/Tile";
 
 export default function Board() {
@@ -30,15 +30,31 @@ export default function Board() {
     setLocalBoard(newBoard);
   };
 
+  // Reset the game board
+  const resetBoard = () => {
+    const newBoard = Array(9).fill(null);
+    sendMove({ board: newBoard, isXTurn: true }); // Reset board and set 'X' to start
+    setLocalBoard(newBoard); // Reset local board
+  };
+
+  // If there's a winner, reset the board after 2 seconds
+  const winner = calculateWinner(localBoard);
+  useEffect(() => {
+    if (winner) {
+      setTimeout(() => {
+        resetBoard();
+      }, 2000);
+    }
+  }, [winner]);
+
   const renderTile = (i) => {
     return <Tile value={localBoard[i]} onClick={() => handleClick(i)} />;
   };
 
-  const winner = calculateWinner(localBoard);
-  let status = winner ? `Winner: ${winner}` : `Next player: ${gameState?.isXTurn ? "X" : "O"}`;
+  const status = winner ? `Winner: ${winner}` : `Next player: ${gameState?.isXTurn ? "X" : "O"}`;
 
   return (
-    <div className="flex flex-col text-center">
+    <div className="flex flex-col text-center items-center">
       <h2>{status}</h2>
       <div className="flex justify-center">
         {renderTile(0)}
@@ -55,6 +71,9 @@ export default function Board() {
         {renderTile(7)}
         {renderTile(8)}
       </div>
+      <button className="m-5 px-4 py-2 bg-[#009FD4] text-white rounded w-auto" onClick={resetBoard}>
+        Reset Game
+      </button>
       <p>{isConnected ? "Connected" : "Not connected"}</p>
     </div>
   );
